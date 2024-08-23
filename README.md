@@ -29,10 +29,6 @@ This task involves creating API documentation for the "Nudge" service. The docum
 - **Endpoint 2:** Description of the second endpoint, including request and response examples.
 - **Endpoint 3:** Description of the third endpoint, including request and response examples.
 
-### Accessing the Documentation
-
-You can find the API documentation in the `Task-2` directory. It is available in [Swagger](https://swagger.io/) format, which allows you to visualize and interact with the API.
-
 ## Conclusion
 
 This project demonstrates my ability to implement backend services and document APIs effectively. For any questions or suggestions, please feel free to reach out.
