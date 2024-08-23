@@ -73,6 +73,7 @@ const getEvent = async (req, res, next) => {
     // Get Id if available then get event and if not exists pass to next handler
     if (!(req.query && req.query.id)) {
         next();
+        return;
     }
     const eventId = req.query.id;
 
@@ -141,47 +142,51 @@ const updateEvent = asyncHandler(async (req, res) => {
         return; //exit the control from the handler method
     }
 
-  try {
-      const db = await getDB();
-  
-  
-      const updateFields = {
-          name,
-          tagline,
-          schedule,
-          description,
-          files: {
-              image: req.file.path
-          },
-          moderator,
-          category,
-          sub_category,
-          rigor_rank
-      };
-  
-      const updatedEvent = await db.updateOne(
-          { _id: new ObjectId(String(eventId)) },
-          { $set: updateFields }
-      );
-  
-      if (updatedEvent.modifiedCount > 0) {
-         return res
-         .status(200)
-         .json(
-             new ApiResponse(200 , updateEvent , "Event updated successfully")
-         )
-      }
-  } catch (error) {
-    console.log("Unable to update events");
-    throw new ApiError(500, "Unable to update events")
-  }
+    try {
+        const db = await getDB();
+
+
+        const updateFields = {
+            name,
+            tagline,
+            schedule,
+            description,
+            files: {
+                image: req.file.path
+            },
+            moderator,
+            category,
+            sub_category,
+            rigor_rank
+        };
+
+        const updatedEvent = await db.updateOne(
+            { _id: new ObjectId(String(eventId)) },
+            { $set: updateFields }
+        );
+
+        if (updatedEvent.modifiedCount > 0) {
+            return res
+                .status(200)
+                .json(
+                    new ApiResponse(200, updateEvent, "Event updated successfully")
+                )
+        }
+    } catch (error) {
+        console.log("Unable to update events");
+        throw new ApiError(500, "Unable to update events")
+    }
 
 });
 
 
 // Paginates And Limits Method
 const paginationLimitEvent = asyncHandler(async (req, res) => {
+    if (!(req.query && req.query.type)) {
+        throw new ApiError(400, "Event type is required !! ")
+    }
     const { limit = 5, page = 1 } = req.query;
+
 
     try {
         const db = await getDB();
