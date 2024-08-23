@@ -104,7 +104,7 @@ project-root/
 
  # **File Upload Handling**   
  
- File uploads (e.g., images) are handled using multer middleware, which is configured in the `middleware/` directory
+  File uploads (e.g., images) are handled using multer middleware, which is configured in the `middleware/` directory
 
  # **File Upload Handling**   
  

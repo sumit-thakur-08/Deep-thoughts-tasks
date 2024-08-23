@@ -10,9 +10,7 @@ const createEvent = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'No image file uploaded' });
     }
 
-    const filePath = `/public/uploads/${req.file.filename}`;
-    // console.log('File Path:', filePath);
-
+    const filePath = `/public/uploads/${req.file.filename}`; // get file path
     const {
         uid,
         name,
@@ -26,10 +24,8 @@ const createEvent = asyncHandler(async (req, res) => {
         attendees,
     } = req.body;
 
-
-
     // Validate required fields
-    if (!uid || !name || !schedule || !moderator || !category || !rigor_rank) {
+    if (!uid || !name || !tagline || !description || !schedule || !moderator || !category || !sub_category || !rigor_rank || !attendees) {
         throw new ApiError(400, "All feilds are required")
     }
 
@@ -53,12 +49,11 @@ const createEvent = asyncHandler(async (req, res) => {
         };
 
         const result = await db.insertOne(eventData);
-        // console.log("insert result::", result);
-
         if (!result || !result.insertedId) {
             throw new ApiError(400, "Something went wrong while inserting the data");
         }
 
+        // return response
         return res.status(200).json(new ApiResponse(200, result, "Event Created"));
 
     } catch (error) {
@@ -72,7 +67,7 @@ const getEvent = async (req, res, next) => {
 
     // Get Id if available then get event and if not exists pass to next handler
     if (!(req.query && req.query.id)) {
-        next();
+        next(); // if there is no Id pass method to anothet method
         return;
     }
     const eventId = req.query.id;
