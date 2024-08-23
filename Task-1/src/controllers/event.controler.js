@@ -68,16 +68,16 @@ const createEvent = asyncHandler(async (req, res) => {
 });
 
 // method for get Event ---
-const getEvent = async (req, res ,next) => {
+const getEvent = async (req, res, next) => {
 
     // Get Id if available then get event and if not exists pass to next handler
-    if(!(req.query && req.query.id)){
+    if (!(req.query && req.query.id)) {
         next();
     }
     const eventId = req.query.id;
 
     if (!eventId) {
-        res.status(404).json({ message: 'Event Id Missing'});
+        res.status(404).json({ message: 'Event Id Missing' });
     };
 
     try {
@@ -91,7 +91,7 @@ const getEvent = async (req, res ,next) => {
         );
 
         if (!event) {
-            res.status(404).json({ message: 'Event Not Found'});
+            res.status(404).json({ message: 'Event Not Found' });
         };
 
         // return response
@@ -102,7 +102,7 @@ const getEvent = async (req, res ,next) => {
 
     } catch (error) {
         console.log("Details ::", error);
-        res.status(500).json({ message: 'Failed To Fetch Event'});
+        res.status(500).json({ message: 'Failed To Fetch Event' });
     }
 };
 
@@ -114,53 +114,74 @@ const updateEvent = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Invalid Id Format")
     }
 
-    try {
-        const db = await getDB();
 
-        const event = await db.findOne({
-            _id: new ObjectId(eventId)
+    // fetch event details from req body
+    const { name, tagline, schedule, description, moderator, category, sub_category, rigor_rank } = req.body;
+
+    //validation - not empty
+    const requiredFields = [name, tagline, schedule, description, moderator, category, sub_category, rigor_rank];
+    if (requiredFields.some(
+        field => !field || String(field).trim() === ""
+    )) {
+        //send the client error message to the client
+        res.status(400).json({
+            error: "All Fields are required in order to update",
+            success: false
         });
-
-        if (!event) {
-            throw new ApiError(404, "Event Not Found")
-        }
-        // console.log(event);
-
-        const updateEvent = { ...req.body }; // fields for update
-        console.log("updated Feilds: ", updateEvent);
-
-        if (req.file) {
-            const newFilePath = `/public/uploads/${req.file.filename}`;
-            console.log("New Image Path:", newFilePath);
-            updateEvent.image = newFilePath;  // Add new image path to update fields
-        }
-
-        // update the event in to databsase
-        const result = await db.updateOne(
-            { _id: new ObjectId(eventId) },
-            { $set: updateEvent }
-        )
-
-        if (result.matchedCount === 0) {
-            throw new ApiError(404, "Event not exists")
-        }
-
-        return res
-            .status(200)
-            .json(
-                new ApiResponse(200, result, "Event Updated")
-            )
-    } catch (error) {
-        console.log("something wrong while updating the event Data", error);
-        throw new ApiError(400, "Unable to update Event")
+        return; //exit the control from the handler method
     }
+
+    //check if the file field is present or not
+    if (!(req.file && req.file.path)) {
+        //send the client error message to the client
+        res.status(400).json({
+            error: "Image File is required",
+            success: false
+        });
+        return; //exit the control from the handler method
+    }
+
+  try {
+      const db = await getDB();
+  
+  
+      const updateFields = {
+          name,
+          tagline,
+          schedule,
+          description,
+          files: {
+              image: req.file.path
+          },
+          moderator,
+          category,
+          sub_category,
+          rigor_rank
+      };
+  
+      const updatedEvent = await db.updateOne(
+          { _id: new ObjectId(String(eventId)) },
+          { $set: updateFields }
+      );
+  
+      if (updatedEvent.modifiedCount > 0) {
+         return res
+         .status(200)
+         .json(
+             new ApiResponse(200 , updateEvent , "Event updated successfully")
+         )
+      }
+  } catch (error) {
+    console.log("Unable to update events");
+    throw new ApiError(500, "Unable to update events")
+  }
 
 });
 
 
 // Paginates And Limits Method
 const paginationLimitEvent = asyncHandler(async (req, res) => {
-    const { limit=5, page=1 } = req.query;
+    const { limit = 5, page = 1 } = req.query;
 
     try {
         const db = await getDB();
