@@ -184,7 +184,7 @@ const paginationLimitEvent = asyncHandler(async (req, res) => {
 
 
     try {
-        const db = await getDB();
+        const db = await getDB();  // refrence to database
 
         // calculate paginate parameter
         const limitNumber = parseInt(limit, 10);
@@ -239,7 +239,7 @@ const deleteEvent = asyncHandler(async (req, res) => {
             throw new ApiError(404, "Event Not Found")
         }
 
-        // send response
+        // send response 
         return res
             .status(200)
             .json(
