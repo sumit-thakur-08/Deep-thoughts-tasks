@@ -31,42 +31,35 @@
 
 # CRUD Functionalities Documentation
 
-## 1. Create a Nudge
+ ## 1. Create a Nudge
 
-- **Request Type:** POST
-- **Endpoint:** `/api/v1/nudge/nudges`
-- **Payload:**
-  ```json
-  {
-    "type": "event",         // or "article"
-    "title": "Sample Title", // characters
-    "image_url": "https://example.image/upload/image.com",
-    "scheduled_date": "2024-08-25", // Format: dd/mm/yyyy
-    "timing": "14:00-16:00", // Format: hh:mm-hh:mm
-    "description": "This is a sample nudge.",
-    "invitation_text": "Check out this upcoming workshop!",
-    "icon_url": "https://example.com/icon.png"
-  }
+  - **Request Type:** POST
+  - **Endpoint:** `/api/v1/nudge/nudges`
+  - **Payload:**
+   ```json
+    {
+      "type": "event",         // or "article"
+      "title": "Sample Title", // characters
+      "image_url": "https://example.image/upload/image.com",
+      "scheduled_date": "2024-08-25", // Format: dd/mm/yyyy
+      "timing": "14:00-16:00", // Format: hh:mm-hh:mm
+      "description": "This is a sample nudge.",
+      "invitation_text": "Check out this upcoming workshop!",
+      "icon_url": "https://example.com/icon.png"
+    }
+  ```
 
- - *Description*: Creates a new nudge with the provided details and returns the unique ID of the created nudge.
- - *Response*:
+   - *Description*: Creates a new nudge with the provided details and returns the unique ID of the created nudge.
+ 
+  **Response**:
   - Success: 201 Created
-    json
-    {
-    "id": "user123"
-    }
+   
     
-  - Error: 400 Bad Request
-    json
-    {
-    "error": "Input data is Invalid"
-    }
-    
- ### 2. Update a Nudge
+ ## 2. Update a Nudge
   - *Request Type*: PUT
   - *Endpoint*: /api/v1/nudge/nudges/:id
   - *Payload*:
-  json
+  ```json
   {
     "type": "event",               // or "article"
     "title": "Updated Title",       // Up to 60 characters
@@ -77,59 +70,61 @@
     "invitation_text": "Join us for the upcoming workshop!",
     "icon_url": "https://example.com/icon.png"
   }
+  ```
   
   - *Description*: Updates the details of an existing nudge based on its unique ID.
   - *Response*:
   - Success: 200 OK
-    json
+    ```json
     {
       "message": "Nudge updated successfully"
     }
+    ```
     
   - Error: 400 Bad Request
-    json
-    {
-    "error": "Invalid input data"
-    }
+    ``` json
+      {
+       "error": "Invalid input data"
+      }
+    ```
     
   - Error: 404 Not Found
-    json
-    {
-      "error": "Nudge not found"
-    }
+     ```json
+      {
+        "error": "Nudge not found"
+      }
+    ```
     
-
- ### 3. Retrieve a Nudge
+ ## 3. Retrieve a Nudge
    - *Request Type*: GET
    - *Endpoint*: /api/v1/nudge/nudges?id=:nudge_id
    - *Payload*: None
    - *Description*: Retrieves the details of a specific nudge based on its unique ID.
    - *Response*:
    - Success: 200 OK
-    json
-    {
-      "id": "user123",
-      "type": "event",
-      "title": "your title",
-      "image_url": "https://example.com/upload/image.jpg",
-      "scheduled_date": "2022-09-09",
-      "timing": "14:00-16:00",
-      "description": "This is a sample nudge.",
-      "invitation_text": "Check out this upcoming workshop!",
-      "icon_url": "https://example.com/icon.png",
-      "status": "active"
-    }
+     ```json
+      {
+       "id": "12345",
+       "type": "event",
+       "title": "Sample Title",
+       "image_url": "https://example.com/image.jpg",
+       "scheduled_date": "2024-08-25",
+       "timing": "14:00-16:00",
+       "description": "This is a sample nudge.",
+       "invitation_text": "Check out this upcoming workshop!",
+       "icon_url": "https://example.com/icon.png",
+       "status": "active"
+      }
+    
     
    - Error: 404 Not Found
-     ```json
-       {
+      ```json
+      {
         "error": "Nudge not found"
-       }
-     ```
-    
-
-
-### 4. Delete a Nudge
+      }
+      ```
+      
+## 4. Delete a Nudge
 - *Request Type*: DELETE
 - *Endpoint*: /api/v1/nudge/nudges/:id
 - *Payload*: None
@@ -145,6 +140,6 @@
   - Error: 404 Not Found
     ```json
     {
-    "error": "Nudge not found"
+      "error": "Nudge not found"
     }
     ```
