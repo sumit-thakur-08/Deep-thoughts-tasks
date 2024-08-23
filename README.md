@@ -18,23 +18,6 @@ In this task, I've implemented a CRUD (Create, Read, Update, Delete) application
 - Node.js
 - Express.js
 - MongoDB
-- Mongoose
-
-### Setup and Installation
-
-To run this application:
-
-1. Clone the repository.
-2. Navigate to the `Task-1` directory.
-3. Install the necessary dependencies by running:
-    ```bash
-    npm install
-    ```
-4. Set up your MongoDB connection string in a `.env` file.
-5. Run the application using:
-    ```bash
-    npm start
-    ```
 
 ## Task 2: API Documentation for Nudge
 
